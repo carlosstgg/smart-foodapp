@@ -15,9 +15,9 @@ export default function BottomNav() {
   return (
     <nav
       aria-label="Navegación principal"
-      className="pointer-events-none fixed bottom-0 inset-x-0 z-40 flex justify-center px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-2"
+      className="pointer-events-none fixed bottom-0 inset-x-0 z-40 flex justify-center px-3 pb-[max(env(safe-area-inset-bottom),10px)] pt-2"
     >
-      <ul className="pointer-events-auto glass-strong glass-shine flex items-center gap-1 rounded-full px-1.5 py-1.5">
+      <ul className="pointer-events-auto glass-strong glass-shine flex items-stretch gap-1 rounded-[28px] p-1.5 w-full max-w-[26rem]">
         {tabs.map((t) => {
           const active =
             t.href === "/"
@@ -25,28 +25,26 @@ export default function BottomNav() {
               : pathname.startsWith(t.href);
           const Icon = t.icon;
           return (
-            <li key={t.href}>
+            <li key={t.href} className="flex-1 min-w-0">
               <Link
                 href={t.href}
                 aria-current={active ? "page" : undefined}
-                className={`tap relative flex items-center gap-1.5 rounded-full px-3 py-2 text-[12.5px] font-semibold transition-colors ${
-                  active
-                    ? "text-white"
-                    : "text-zinc-700 hover:text-zinc-900"
+                className={`tap relative flex flex-col items-center justify-center gap-0.5 rounded-[22px] px-1 py-1.5 text-[10.5px] font-semibold transition-colors w-full ${
+                  active ? "text-white" : "text-zinc-700"
                 }`}
               >
                 {active && (
                   <span
                     aria-hidden
-                    className="absolute inset-0 rounded-full bg-gradient-to-b from-[#1cd07b] to-[#0e8f4a] shadow-[0_6px_18px_rgba(28,191,106,0.45)]"
+                    className="absolute inset-0 rounded-[22px] bg-gradient-to-b from-[#1cd07b] to-[#0e8f4a] shadow-[0_6px_18px_rgba(28,191,106,0.45)]"
                   />
                 )}
                 <Icon
-                  className={`relative size-[18px] ${
+                  className={`relative size-[20px] ${
                     active ? "text-white" : "text-zinc-700"
                   }`}
                 />
-                <span className="relative">{t.label}</span>
+                <span className="relative leading-none">{t.label}</span>
               </Link>
             </li>
           );
