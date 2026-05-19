@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------
+   SmartFood — Liquid Glass / VisionOS-inspired design tokens
+   ---------------------------------------------------------------- */
+:root {
+  /* Surface */
+  --bg-base: #f4f7f4;
+  --bg-elev: #ffffff;
+  --fg: #0a0f0c;
+  --fg-muted: #5b6a63;
+  --fg-soft: #8b9590;
+
+  /* Brand (food-fresh) */
+  --brand: #1cbf6a;
+  --brand-strong: #0e8f4a;
+  --brand-glow: 0 0 40px rgba(28, 191, 106, 0.35);
+
+  /* Accent gradients (mesh aurora) */
+  --aurora-1: #b7f0d3;
+  --aurora-2: #c7ecff;
+  --aurora-3: #ffe7b8;
+  --aurora-4: #f9d5e5;
+
+  /* Glass system */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-bg-tint: rgba(255, 255, 255, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border-inner: rgba(255, 255, 255, 0.9);
+  --glass-blur: 28px;
+  --glass-blur-lg: 40px;
+  --glass-saturate: 180%;
+  --depth-1: 0 1px 0 rgba(255, 255, 255, 0.7) inset,
+             0 -1px 0 rgba(0, 0, 0, 0.04) inset,
+             0 6px 24px rgba(15, 30, 22, 0.07);
+  --depth-2: 0 1px 0 rgba(255, 255, 255, 0.7) inset,
+             0 -1px 0 rgba(0, 0, 0, 0.05) inset,
+             0 16px 40px rgba(15, 30, 22, 0.12);
+
+  /* Motion */
+  --easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 220ms;
+  --t-base: 420ms;
+  --t-slow: 600ms;
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--fg);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
+    "SF Pro Text", "Helvetica Neue", Inter, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.011em;
+}
+
+/* ----------------------------------------------------------------
+   Aurora mesh — vivid background layer behind the glass
+   ---------------------------------------------------------------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 12% 10%, var(--aurora-1) 0%, transparent 70%),
+    radial-gradient(45% 35% at 88% 18%, var(--aurora-2) 0%, transparent 70%),
+    radial-gradient(50% 40% at 80% 85%, var(--aurora-3) 0%, transparent 70%),
+    radial-gradient(45% 35% at 10% 90%, var(--aurora-4) 0%, transparent 70%),
+    linear-gradient(180deg, #f4fbf6 0%, #f1f6fb 100%);
+  filter: saturate(115%);
+}
+.aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* ----------------------------------------------------------------
+   Glass primitives
+   ---------------------------------------------------------------- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--depth-1);
+}
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--depth-2);
+}
+.glass-tint {
+  background: var(--glass-bg-tint);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+}
+.glass-dark {
+  background: rgba(10, 18, 14, 0.55);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f5fbf7;
+}
+
+/* Liquid shine highlight (top inner glow) */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+.glass-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 30%
+  );
+  pointer-events: none;
+}
+
+/* Tap / press feedback */
+.tap {
+  transition: transform var(--t-fast) var(--easing),
+    box-shadow var(--t-fast) var(--easing),
+    background var(--t-fast) var(--easing);
+}
+.tap:active {
+  transform: scale(0.97);
+}
+
+/* Glow accent */
+.glow {
+  box-shadow: var(--brand-glow), var(--depth-1);
+}
+
+/* Hide scrollbars on horizontal scrollers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Mobile shell — phone-frame on tablet/desktop, full bleed on phone */
+.phone-shell {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+@media (min-width: 480px) {
+  .phone-shell {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-radius: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 30px 80px rgba(15, 30, 22, 0.18),
+      0 6px 24px rgba(15, 30, 22, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    min-height: calc(100dvh - 48px);
+  }
+}
