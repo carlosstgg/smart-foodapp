@@ -1,7 +1,8 @@
 # SmartFood — Gestor Inteligente de Despensa
 
 > Reduce el desperdicio alimentario en tu hogar con IA. Escanea tickets, gestiona tu inventario, genera recetas y mide tu impacto ambiental.
-
+> Demo en vivo disponible. Desplegado en vercel.
+> https://smart-foodapp.vercel.app
 ---
 
 ## Descripción
