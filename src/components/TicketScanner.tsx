@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { todayISO, addDaysISO } from "@/lib/dates";
 import { createProducts } from "@/app/inventario/actions";
+import type { Category } from "@/lib/types";
 
 type ScannedItem = {
   id: string;
@@ -11,11 +12,22 @@ type ScannedItem = {
   quantity: number;
   unit: string;
   expiry_date: string;
+  category_id: number | null;
 };
 
 type ScanResponse = {
-  products?: Array<{ name: string; price: number; quantity: number; unit: string }>;
+  products?: Array<{
+    name: string;
+    price: number;
+    quantity: number;
+    unit: string;
+    category_id: number | null;
+  }>;
   error?: string;
+};
+
+type Props = {
+  categories: Category[];
 };
 
 const UNITS = ["unidad", "kg", "g", "L", "ml", "paquete"];
@@ -23,7 +35,7 @@ const UNITS = ["unidad", "kg", "g", "L", "ml", "paquete"];
 const inputCls =
   "w-full bg-white/70 border border-white/70 rounded-2xl px-4 py-3 outline-none transition focus:border-[var(--brand)] focus:bg-white shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_4px_12px_rgba(15,30,22,0.05)]";
 
-export default function TicketScanner() {
+export default function TicketScanner({ categories }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<"idle" | "scanning" | "review">("idle");
   const [items, setItems] = useState<ScannedItem[]>([]);
@@ -31,7 +43,11 @@ export default function TicketScanner() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const updateItem = (id: string, field: keyof ScannedItem, value: string | number) => {
+  const updateItem = (
+    id: string,
+    field: keyof ScannedItem,
+    value: string | number | null,
+  ) => {
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
@@ -59,7 +75,11 @@ export default function TicketScanner() {
       const res = await fetch("/api/scan-ticket", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageBase64, mimeType: file.type }),
+        body: JSON.stringify({
+          imageBase64,
+          mimeType: file.type,
+          categories: categories.map((c) => ({ id: c.id, name: c.name })),
+        }),
       });
 
       const data = (await res.json()) as ScanResponse;
@@ -75,6 +95,7 @@ export default function TicketScanner() {
           quantity: p.quantity,
           unit: p.unit,
           expiry_date: "",
+          category_id: p.category_id ?? null,
         })),
       );
       setStep("review");
@@ -97,7 +118,7 @@ export default function TicketScanner() {
       await createProducts(
         items.map((item) => ({
           name: item.name,
-          category_id: null,
+          category_id: item.category_id,
           quantity: item.quantity,
           unit: item.unit,
           price: item.price,
@@ -195,6 +216,36 @@ export default function TicketScanner() {
               className={`mt-1 ${inputCls}`}
             />
           </div>
+
+          {categories.length > 0 && (
+            <div>
+              <label className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">
+                Categoría
+              </label>
+              <div className="mt-1 -mx-1 flex gap-2 overflow-x-auto no-scrollbar pb-1 px-1">
+                {categories.map((c) => {
+                  const active = item.category_id === c.id;
+                  return (
+                    <button
+                      type="button"
+                      key={c.id}
+                      onClick={() =>
+                        updateItem(item.id, "category_id", active ? null : c.id)
+                      }
+                      className={`tap shrink-0 px-3.5 py-2 rounded-full border text-sm flex items-center gap-1.5 transition ${
+                        active
+                          ? "bg-gradient-to-b from-[#1cd07b] to-[#0e8f4a] text-white border-emerald-500/40 shadow-[0_6px_18px_rgba(28,191,106,0.35)]"
+                          : "glass text-zinc-800"
+                      }`}
+                    >
+                      <span>{c.icon}</span>
+                      {c.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-3">
             <div>
