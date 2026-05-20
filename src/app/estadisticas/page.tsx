@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import AppHeader from "@/components/AppHeader";
+import ImpactTile from "@/components/ImpactTile";
 import { formatMoney } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
-const WATER_LITERS_PER_PESO = 2.5;
-const CO2_GRAMS_PER_PESO = 80;
+const WATER_LITERS_PER_PESO = 12;
+const CO2_GRAMS_PER_PESO = 50;
 
 export default async function EstadisticasPage() {
   const supabase = createClient(await cookies());
@@ -170,28 +171,30 @@ export default async function EstadisticasPage() {
 
         {/* Impact tiles */}
         <section className="grid grid-cols-2 gap-3">
-          <div className="glass glass-shine rounded-3xl p-4">
-            <div className="size-9 rounded-full bg-sky-300/35 grid place-items-center text-xl">
-              💧
-            </div>
-            <p className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold mt-2">
-              Agua ahorrada
-            </p>
-            <p className="text-[22px] font-semibold text-sky-700 tabular-nums">
-              {waterSaved.toLocaleString("es-MX")} L
-            </p>
-          </div>
-          <div className="glass glass-shine rounded-3xl p-4">
-            <div className="size-9 rounded-full bg-emerald-300/40 grid place-items-center text-xl">
-              🌱
-            </div>
-            <p className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold mt-2">
-              CO₂ evitado
-            </p>
-            <p className="text-[22px] font-semibold text-emerald-700 tabular-nums">
-              {co2Saved.toLocaleString("es-MX")} kg
-            </p>
-          </div>
+          <ImpactTile
+            icon="💧"
+            label="Agua ahorrada"
+            value={`${waterSaved.toLocaleString("es-MX")} L`}
+            accentBg="bg-sky-300/35"
+            accentText="text-sky-700"
+            explanation="Producir 1 kg de alimentos requiere entre 800 y 1,500 litros de agua según Mekonnen & Hoekstra (2011). Con un precio promedio de $80 pesos/kg en México, eso equivale a ~12 litros por peso. Multiplicamos el valor del alimento que consumiste por ese factor para estimar cuánta agua no fue necesario usar en producción adicional."
+            source={{
+              name: "Mekonnen & Hoekstra (2011) — Water Footprint Network",
+              url: "https://www.waterfootprint.org/resources/Mekonnen-Hoekstra-2011-WaterFootprintCrops.pdf",
+            }}
+          />
+          <ImpactTile
+            icon="🌱"
+            label="CO₂ evitado"
+            value={`${co2Saved.toLocaleString("es-MX")} kg`}
+            accentBg="bg-emerald-300/40"
+            accentText="text-emerald-700"
+            explanation="Una dieta mixta genera entre 3 y 5 kg de CO₂ por kilogramo de alimento según Poore & Nemecek (2018). Con un precio promedio de $80 pesos/kg, eso da ~50 gramos de CO₂ por peso. Al no desperdiciar, evitas que se tenga que producir comida extra — esa es la emisión que no ocurre."
+            source={{
+              name: "Poore & Nemecek (2018) — Science · Our World in Data",
+              url: "https://ourworldindata.org/grapher/ghg-per-kg-poore",
+            }}
+          />
         </section>
 
         {/* Accumulated */}
