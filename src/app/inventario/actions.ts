@@ -78,6 +78,38 @@ export async function markProductStatus(
   refresh();
 }
 
+type CreateProductPayload = {
+  name: string;
+  category_id: number | null;
+  quantity: number;
+  unit: string;
+  price: number;
+  purchase_date: string;
+  expiry_date: string;
+};
+
+export async function createProducts(items: CreateProductPayload[]) {
+  const supabase = createClient(await cookies());
+
+  const payload = items.map((item) => ({
+    name: item.name.trim(),
+    category_id: item.category_id,
+    quantity: item.quantity,
+    unit: item.unit,
+    price: item.price,
+    purchase_date: item.purchase_date,
+    expiry_date: item.expiry_date,
+    note: null,
+    status: "active" as const,
+  }));
+
+  const { error } = await supabase.from("products").insert(payload);
+  if (error) throw new Error(error.message);
+
+  refresh();
+  redirect("/inventario");
+}
+
 export async function deleteProduct(id: number) {
   const supabase = createClient(await cookies());
   const { error } = await supabase.from("products").delete().eq("id", id);

@@ -47,23 +47,46 @@ export default async function InventarioPage({
         title="Inventario"
         subtitle={`${products.length} producto${products.length === 1 ? "" : "s"}`}
         action={
-          <Link
-            href="/inventario/nuevo"
-            className="tap size-10 rounded-full bg-gradient-to-b from-[#1cd07b] to-[#0e8f4a] text-white grid place-items-center text-xl shadow-[0_10px_24px_rgba(28,191,106,0.45)]"
-            aria-label="Agregar producto"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              className="size-[18px]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="flex items-center gap-2">
+            <Link
+              href="/inventario/escanear"
+              className="tap size-10 rounded-full glass border border-white/70 text-zinc-700 grid place-items-center shadow-[0_4px_12px_rgba(15,30,22,0.08)]"
+              aria-label="Escanear ticket"
             >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </Link>
+              <svg
+                viewBox="0 0 24 24"
+                className="size-[18px]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.7}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M2 7V5a2 2 0 0 1 2-2h2" />
+                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                <rect x="7" y="7" width="10" height="10" rx="1" />
+              </svg>
+            </Link>
+            <Link
+              href="/inventario/nuevo"
+              className="tap size-10 rounded-full bg-gradient-to-b from-[#1cd07b] to-[#0e8f4a] text-white grid place-items-center text-xl shadow-[0_10px_24px_rgba(28,191,106,0.45)]"
+              aria-label="Agregar producto"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="size-[18px]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </Link>
+          </div>
         }
       />
 
