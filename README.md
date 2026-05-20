@@ -14,9 +14,10 @@ El sistema permite registrar productos manualmente o escaneando tickets de compr
 
 ## Capturas de pantalla
 
-| Dashboard | Inventario | Escanear Ticket | Recetas | Estadísticas |
-|-----------|-----------|----------------|---------|--------------|
-| Vista principal con métricas rápidas | Lista con búsqueda y filtros | IA extrae productos del ticket | Sugerencias basadas en despensa | Gráficas de ahorro e impacto |
+| Dashboard | Inventario | Recetas con IA | Mi Ahorro |
+|:---------:|:----------:|:--------------:|:---------:|
+| ![Dashboard](docs/screenshots/dashboard.jpeg) | ![Inventario](docs/screenshots/inventario.jpeg) | ![Recetas](docs/screenshots/recetas.jpeg) | ![Estadísticas](docs/screenshots/estadisticas.jpeg) |
+| Métricas rápidas, valor en riesgo y accesos directos | Lista con búsqueda y filtros por caducidad | Genera 3 recetas con lo que tienes en despensa | Tasa de consumo, ahorro mensual e impacto ambiental |
 
 ---
 
